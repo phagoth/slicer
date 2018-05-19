@@ -8,5 +8,7 @@ class User
   has_secure_password
 
   validates :email, presence: true, uniqueness: true
-  validates :password_confirmation, presence: true
+  validates :password_confirmation, presence: true, on: :create
+
+  embeds_many :videos
 end
