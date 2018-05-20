@@ -9,6 +9,7 @@ class VideoTrimmer
     trim!
     set_result
     set_result_duration
+    @video.complete!
   end
 
   private
@@ -16,7 +17,10 @@ class VideoTrimmer
   def validate!
     message = Message.finish_less_than_start unless @video.start_position < @video.finish_position
     message = Message.finish_exceeds_duration unless @video.finish_position < video_duration(ffmpeg_source_movie)
-    raise ExceptionHandler::WrongTiming, message if message
+    if message
+      @video.fail!
+      raise ExceptionHandler::WrongTiming, message
+    end
   end
 
   def trim!
@@ -26,6 +30,9 @@ class VideoTrimmer
           '-to', @video.finish_position.to_s,
           '-strict', '-2'
         ])
+  rescue Exception => e
+    @video.fail!
+    raise ExceptionHandler::EncodingError, e.message
   end
 
   def set_result

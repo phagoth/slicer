@@ -6,6 +6,7 @@ module ExceptionHandler
   class MissingToken < StandardError; end
   class InvalidToken < StandardError; end
   class WrongTiming < StandardError; end
+  class EncodingError < StandardError; end
 
   included do
     # Define custom handlers
@@ -13,6 +14,7 @@ module ExceptionHandler
     rescue_from ExceptionHandler::MissingToken, with: :four_twenty_two
     rescue_from ExceptionHandler::InvalidToken, with: :four_twenty_two
     rescue_from ExceptionHandler::WrongTiming, with: :four_twenty_two
+    rescue_from ExceptionHandler::EncodingError, with: :four_twenty_two
 
     rescue_from Mongoid::Errors::DocumentNotFound do |e|
       json_response({ message: e.problem }, :not_found)
