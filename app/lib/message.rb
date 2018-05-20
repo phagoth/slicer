@@ -32,5 +32,13 @@ class Message
     def expired_token
       'Sorry, your token has expired. Please login to continue.'
     end
+
+    def finish_less_than_start
+      'Finish should be greater than Start'
+    end
+
+    def finish_exceeds_duration
+      'Finish should be less than video duration'
+    end
   end
 end
