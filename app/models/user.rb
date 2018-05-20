@@ -1,5 +1,6 @@
 class User
   include Mongoid::Document
+  include GlobalID::Identification
   include ActiveModel::SecurePassword
 
   field :email, type: String

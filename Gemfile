@@ -31,7 +31,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'aasm'
 gem 'carrierwave-mongoid', '~> 1.0', require: 'carrierwave/mongoid'
 gem 'jwt'
-
+gem 'sidekiq'
 gem 'streamio-ffmpeg'
 
 group :development, :test do

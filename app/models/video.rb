@@ -1,5 +1,6 @@
 class Video
   include Mongoid::Document
+  # include GlobalID::Identification
   include AASM
   field :source, type: String
   field :result, type: String
@@ -46,7 +47,6 @@ class Video
   private
 
   def start_video_processing
-    pp '---------------============= Start video processing ============------------------------'
-    VideoTrimmer.new(self).call
+    VideoTrimmerJob.perform_later(_parent, id.to_s)
   end
 end
