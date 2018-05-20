@@ -1,9 +1,7 @@
 class VideoTrimmer
-  attr_reader :video, :start, :finish, :ffmpeg_result_movie
-  def initialize(video, start, finish)
+  attr_reader :video, :ffmpeg_result_movie
+  def initialize(video)
     @video = video
-    @start = start
-    @finish = finish
   end
 
   def call
@@ -16,22 +14,22 @@ class VideoTrimmer
   private
 
   def validate!
-    message = Message.finish_less_than_start unless @start < @finish
-    message = Message.finish_exceeds_duration unless @finish < video_duration(ffmpeg_source_movie)
+    message = Message.finish_less_than_start unless @video.start_position < @video.finish_position
+    message = Message.finish_exceeds_duration unless @video.finish_position < video_duration(ffmpeg_source_movie)
     raise ExceptionHandler::WrongTiming, message if message
   end
 
   def trim!
     @ffmpeg_result_movie =
         ffmpeg_source_movie.transcode(@video.result_file_path, [
-          '-ss', @start.to_s,
-          '-to', @finish.to_s,
+          '-ss', @video.start_position.to_s,
+          '-to', @video.finish_position.to_s,
           '-strict', '-2'
         ])
   end
 
   def set_result
-    @video.update_attribute(:result, ffmpeg_result_movie.path)
+    @video.update_attribute(:result, ffmpeg_result_movie&.path&.sub(Rails.public_path.to_s,''))
   end
 
   def set_result_duration

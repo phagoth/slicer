@@ -19,16 +19,8 @@ module V1
       @video = current_user.videos.new(video_params)
 
       if @video.save
+        VideoTrimmer.new(@video).call
         render json: @video, status: :created, location: @video
-      else
-        render json: @video.errors, status: :unprocessable_entity
-      end
-    end
-
-    # PATCH/PUT /videos/1
-    def update
-      if @video.update(video_params)
-        render json: @video
       else
         render json: @video.errors, status: :unprocessable_entity
       end
@@ -47,7 +39,7 @@ module V1
 
     # Only allow a trusted parameter "white list" through.
     def video_params
-      params.require(:video).permit(:file)
+      params.require(:video).permit(:source, :start_position, :finish_position)
     end
   end
 end

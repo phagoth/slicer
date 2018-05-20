@@ -3,6 +3,8 @@ class Video
   field :source, type: String
   field :result, type: String
   field :result_duration, type: Integer
+  field :start_position, type: Integer
+  field :finish_position, type: Integer
 
   mount_uploader :source, ::VideoUploader
 
