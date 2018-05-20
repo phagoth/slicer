@@ -33,6 +33,7 @@ gem 'carrierwave-mongoid', '~> 1.0', require: 'carrierwave/mongoid'
 gem 'jwt'
 gem 'sidekiq'
 gem 'streamio-ffmpeg'
+gem 'active_model_serializers'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
